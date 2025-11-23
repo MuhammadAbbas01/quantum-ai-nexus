@@ -1,1 +1,946 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Multimodal AI Chatbot - Intelligent Agent System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-brain"></i>
+                <span>Intelligent Agent System</span>
+            </div>
+            <div class="nav-links">
+                <button class="nav-button" onclick="newChat()">
+                    <i class="fas fa-plus"></i>
+                    New Chat
+                </button>
+                <button class="nav-button" onclick="toggleSidebar()">
+                    <i class="fas fa-history"></i>
+                    History
+                </button>
+                <button class="nav-button" onclick="clearCurrentChat()">
+                    <i class="fas fa-trash-alt"></i>
+                    Clear Chat
+                </button>
+                <button class="nav-button" onclick="showFeatures()">
+                    <i class="fas fa-cogs"></i>
+                    Agent Features
+                </button>
+                <button class="nav-button" onclick="toggleTextToVoice()">
+                    <i class="fas fa-volume-up"></i>
+                    <span id="ttsToggleText">TTS: ON</span>
+                </button>
+                <div class="agent-status" id="agentStatus">
+                    <i class="fas fa-circle"></i>
+                    <span>Agent Ready</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-history"></i> Chat History</h3>
+                <button class="close-sidebar" onclick="toggleSidebar()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <div class="sessions-list" id="sessionsList">
+                    <div class="loading-sessions">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        Loading sessions...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="main-container">
+            <!-- Chat Interface -->
+            <section class="chat-section">
+                <div class="chat-container">
+                    <!-- Mode Selector -->
+                    <div class="mode-selector" id="modeSelector">
+                        <div class="mode-title">
+                            <h2><i class="fas fa-brain"></i> Intelligent Agent System</h2>
+                            <p>Select your interaction mode - Powered by advanced AI orchestration</p>
+                            <div class="agent-capabilities">
+                                <span class="capability-badge">RAG-Enabled</span>
+                                <span class="capability-badge">Multi-Task Planning</span>
+                                <span class="capability-badge">Context-Aware</span>
+                                <span class="capability-badge">Autonomous Execution</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mode-grid">
+                            <button class="mode-card active" data-mode="text" onclick="selectMode('text')">
+                                <div class="mode-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <h3>Intelligent Chat</h3>
+                                <p>Multi-step reasoning, research, and autonomous task execution</p>
+                                <div class="mode-features">
+                                    <span class="feature-tag">Task Planning</span>
+                                    <span class="feature-tag">Web Research</span>
+                                    <span class="feature-tag">Context Memory</span>
+                                </div>
+                            </button>
+
+                            <button class="mode-card" data-mode="image" onclick="selectMode('image')">
+                                <div class="mode-icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <h3>Vision Analysis</h3>
+                                <p>Advanced image understanding with enhancement and intelligent processing</p>
+                                <div class="mode-features">
+                                    <span class="feature-tag">AI Enhancement</span>
+                                    <span class="feature-tag">Smart OCR</span>
+                                    <span class="feature-tag">Pipeline Selection</span>
+                                </div>
+                            </button>
+
+                            <button class="mode-card" data-mode="voice-text" onclick="selectMode('voice-text')">
+                                <div class="mode-icon">
+                                    <i class="fas fa-microphone-alt"></i>
+                                </div>
+                                <h3>Voice Processing</h3>
+                                <p>Speech recognition and synthesis with intelligent language processing</p>
+                                <div class="mode-features">
+                                    <span class="feature-tag">Smart Recognition</span>
+                                    <span class="feature-tag">Multi-Language</span>
+                                </div>
+                            </button>
+
+                            <button class="mode-card" data-mode="voice-voice" onclick="selectMode('voice-voice')">
+                                <div class="mode-icon">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <h3>Natural Conversation</h3>
+                                <p>Full voice interaction with contextual understanding and response</p>
+                                <div class="mode-features">
+                                    <span class="feature-tag">Context Aware</span>
+                                    <span class="feature-tag">Natural Flow</span>
+                                    <span class="feature-tag">Multi-Language</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div class="chat-messages" id="chatMessages" style="display: none;">
+                        <div class="welcome-message">
+                            <div class="ai-avatar">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="message-content">
+                                <h3>Welcome to the Intelligent Agent System!</h3>
+                                <p>I'm an advanced AI agent capable of:</p>
+                                <ul>
+                                    <li><i class="fas fa-cogs"></i> <strong>Multi-Task Planning:</strong> Breaking complex requests into executable steps</li>
+                                    <li><i class="fas fa-search"></i> <strong>Knowledge Retrieval:</strong> Accessing real-time information and context</li>
+                                    <li><i class="fas fa-brain"></i> <strong>Autonomous Execution:</strong> Coordinating multiple AI tools intelligently</li>
+                                    <li><i class="fas fa-eye"></i> <strong>Advanced Vision:</strong> Sophisticated image analysis and enhancement</li>
+                                    <li><i class="fas fa-memory"></i> <strong>Context Memory:</strong> Maintaining conversation awareness across sessions</li>
+                                    <li><i class="fas fa-chart-line"></i> <strong>Confidence Scoring:</strong> Providing transparency in response quality</li>
+                                    <li><i class="fas fa-tasks"></i> <strong>Task Orchestration:</strong> Managing complex workflows automatically</li>
+                                </ul>
+                                <div class="agent-status-display">
+                                    <div class="status-indicator">
+                                        <i class="fas fa-circle text-success"></i>
+                                        <span>Agent systems online and ready</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Interface -->
+                    <div class="input-interface" id="inputInterface" style="display: none;">
+                        <!-- Text Input -->
+                        <div class="text-input-container" id="textInputContainer">
+                            <div class="image-upload-area" id="imageUploadArea" style="display: none;">
+                                <div class="upload-zone" onclick="document.getElementById('imageInput').click()">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <p>Click to upload an image or drag and drop</p>
+                                    <small>Supports JPG, PNG, GIF (Max 50MB) - Enhanced with AI Processing</small>
+                                </div>
+                                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                                <div class="uploaded-image-preview" id="uploadedImagePreview" style="display: none;">
+                                    <img id="previewImg" src="" alt="Preview">
+                                    <button class="remove-image" onclick="removeUploadedImage()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="input-wrapper">
+                                <textarea 
+                                    id="messageInput" 
+                                    placeholder="Ask me anything - I can research, analyze images, plan tasks, and more... (Shift+Enter for new line)"
+                                    rows="1"
+                                ></textarea>
+                                <div class="input-controls">
+                                    <button class="control-btn" id="imageToggle" onclick="toggleImageUpload()" title="Upload Image for Analysis" style="display: none;">
+                                        <i class="fas fa-image"></i>
+                                    </button>
+                                    <button class="control-btn" id="streamToggle" onclick="toggleStreaming()" title="Toggle Streaming Mode">
+                                        <i class="fas fa-stream"></i>
+                                    </button>
+                                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                                        <span class="btn-icon">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </span>
+                                        <span class="btn-loader">
+                                            <i class="fas fa-cogs fa-spin"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Agent Execution Display -->
+                            <div class="agent-execution-status" id="agentExecutionStatus" style="display: none;">
+                                <div class="execution-header">
+                                    <i class="fas fa-cogs fa-spin"></i>
+                                    <span>Agent Processing...</span>
+                                </div>
+                                <div class="execution-phases">
+                                    <div class="phase" data-phase="rag">
+                                        <i class="fas fa-search"></i>
+                                        <span>Knowledge Retrieval</span>
+                                    </div>
+                                    <div class="phase" data-phase="planning">
+                                        <i class="fas fa-brain"></i>
+                                        <span>Task Planning</span>
+                                    </div>
+                                    <div class="phase" data-phase="execution">
+                                        <i class="fas fa-tasks"></i>
+                                        <span>Execution</span>
+                                    </div>
+                                    <div class="phase" data-phase="synthesis">
+                                        <i class="fas fa-magic"></i>
+                                        <span>Response Synthesis</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image Analysis Input -->
+                        <div class="image-input-container" id="imageInputContainer" style="display: none;">
+                            <div class="image-upload-zone">
+                                <input type="file" id="imageAnalysisInput" accept="image/*" onchange="handleImageAnalysisUpload(event)">
+                                <div class="upload-area" onclick="document.getElementById('imageAnalysisInput').click()">
+                                    <div class="upload-content">
+                                        <i class="fas fa-brain upload-icon"></i>
+                                        <h3>Upload Image for Intelligent Analysis</h3>
+                                        <p>Advanced AI processing with pipeline selection and enhancement</p>
+                                        <small>Supports JPG, PNG, GIF • Max 50MB • AI-Enhanced Processing</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="image-preview" id="imagePreview" style="display: none;">
+                                <div class="preview-container">
+                                    <img id="analysisPreviewImg" src="" alt="Image Preview">
+                                    <button class="remove-preview" onclick="removeImagePreview()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="analysis-options">
+                                    <h4><i class="fas fa-cogs"></i> Intelligent Processing Options</h4>
+                                    <div class="options-grid">
+                                        <label class="option-item">
+                                            <input type="checkbox" id="enhanceImage" checked>
+                                            <span class="checkmark"></span>
+                                            <div class="option-content">
+                                                <strong>AI Enhancement</strong>
+                                                <small>Automatic pipeline selection and image optimization</small>
+                                            </div>
+                                        </label>
+                                        
+                                        <label class="option-item">
+                                            <input type="checkbox" id="extractText" checked>
+                                            <span class="checkmark"></span>
+                                            <div class="option-content">
+                                                <strong>Smart OCR</strong>
+                                                <small>Advanced text extraction with context understanding</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="analysis-message">
+                                        <textarea 
+                                            id="imageMessageInput" 
+                                            placeholder="Ask me anything about this image - I can analyze, explain, compare, research related topics..."
+                                            rows="2"
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="analysis-actions">
+                                    <button class="analyze-btn" onclick="analyzeImage()">
+                                        <i class="fas fa-eye"></i>
+                                        Analyze Image
+                                    </button>
+                                    <button class="analyze-with-text-btn" onclick="analyzeImageWithText()">
+                                        <i class="fas fa-brain"></i>
+                                        Intelligent Analysis + Q&A
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Voice Input -->
+                        <div class="voice-input-container" id="voiceInputContainer" style="display: none;">
+                            <div class="voice-controls">
+                                <!-- Language selector for voice modes -->
+                                <div class="language-selector" id="languageSelector" style="display: none;">
+                                    <label for="responseLanguage">Response Language:</label>
+                                    <select id="responseLanguage">
+                                        <option value="en">English</option>
+                                        <option value="es">Spanish</option>
+                                        <option value="fr">French</option>
+                                        <option value="de">German</option>
+                                        <option value="it">Italian</option>
+                                        <option value="pt">Portuguese</option>
+                                        <option value="ru">Russian</option>
+                                        <option value="ja">Japanese</option>
+                                        <option value="ko">Korean</option>
+                                        <option value="zh">Chinese</option>
+                                        <option value="ar">Arabic</option>
+                                        <option value="hi">Hindi</option>
+                                        <option value="th">Thai</option>
+                                        <option value="ur">Urdu</option>
+                                    </select>
+                                </div>
+                                
+                                <button class="voice-btn" id="recordBtn" onclick="toggleRecording()">
+                                    <span class="btn-icon recording-icon">
+                                        <i class="fas fa-microphone"></i>
+                                    </span>
+                                    <span class="btn-text">Hold to Speak</span>
+                                    <span class="btn-loader">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                    </span>
+                                </button>
+                                
+                                <div class="voice-visualizer" id="voiceVisualizer" style="display: none;">
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Text to Speech Input for voice-text mode -->
+                            <div class="tts-input" id="ttsInput" style="display: none;">
+                                <div class="input-wrapper">
+                                    <textarea 
+                                        id="ttsMessageInput" 
+                                        placeholder="Type text for intelligent speech synthesis..."
+                                        rows="2"
+                                    ></textarea>
+                                    <button class="speak-btn" onclick="speakText()">
+                                        <i class="fas fa-volume-up"></i>
+                                        Speak
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="voice-status" id="voiceStatus">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Press and hold the microphone for intelligent voice interaction</span>
+                            </div>
+                        </div>
+
+                        <!-- Mode Switch Buttons -->
+                        <div class="mode-switch" id="modeSwitch">
+                            <button class="switch-btn" onclick="showModeSelector()">
+                                <i class="fas fa-exchange-alt"></i>
+                                Switch Mode
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Processing Status -->
+            <div class="processing-status" id="processingStatus" style="display: none;">
+                <div class="status-content">
+                    <div class="status-icon">
+                        <i class="fas fa-cogs fa-spin"></i>
+                    </div>
+                    <div class="status-text">
+                        <h3 id="statusTitle">Agent Processing...</h3>
+                        <p id="statusMessage">Orchestrating intelligent response</p>
+                    </div>
+                    <div class="status-progress">
+                        <div class="progress-bar" id="statusProgressBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Features Modal -->
+    <div class="modal-overlay" id="featuresModal" style="display: none;" onclick="hideFeatures()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2><i class="fas fa-brain"></i> Intelligent Agent Capabilities</h2>
+                <button class="modal-close" onclick="hideFeatures()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="capabilities-grid">
+                    <div class="capability-card">
+                        <i class="fas fa-brain capability-icon"></i>
+                        <h3>Task Orchestration</h3>
+                        <p>Intelligent planning and execution of complex multi-step tasks with autonomous decision making.</p>
+                    </div>
+                    <div class="capability-card">
+                        <i class="fas fa-search capability-icon"></i>
+                        <h3>RAG Knowledge System</h3>
+                        <p>Real-time knowledge retrieval from web, conversation history, and local knowledge bases.</p>
+                    </div>
+                    <div class="capability-card">
+                        <i class="fas fa-eye capability-icon"></i>
+                        <h3>Intelligent Vision</h3>
+                        <p>Advanced image analysis with automatic pipeline selection and AI-powered enhancement.</p>
+                    </div>
+                    <div class="capability-card">
+                        <i class="fas fa-memory capability-icon"></i>
+                        <h3>Context Awareness</h3>
+                        <p>Maintains conversation memory and context across sessions for coherent interactions.</p>
+                    </div>
+                    <div class="capability-card">
+                        <i class="fas fa-chart-line capability-icon"></i>
+                        <h3>Confidence Scoring</h3>
+                        <p>Transparent confidence metrics for response quality and reliability assessment.</p>
+                    </div>
+                    <div class="capability-card">
+                        <i class="fas fa-tasks capability-icon"></i>
+                        <h3>Multi-Modal Integration</h3>
+                        <p>Seamless coordination of text, image, and voice processing for complex workflows.</p>
+                    </div>
+                    <div class="capability-card">
+                        <i class="fas fa-cogs capability-icon"></i>
+                        <h3>Autonomous Execution</h3>
+                        <p>Self-directed task completion with intelligent tool selection and orchestration.</p>
+                    </div>
+                    <div class="capability-card">
+                        <i class="fas fa-history capability-icon"></i>
+                        <h3>Session Management</h3>
+                        <p>Advanced conversation tracking with persistent memory and intelligent context switching.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="agent-info">
+                        <h4>Agent System Status</h4>
+                        <div class="system-metrics" id="systemMetrics">
+                            <div class="metric">
+                                <span class="metric-label">Processing Mode:</span>
+                                <span class="metric-value" id="processingMode">Intelligent Agent</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Available Tools:</span>
+                                <span class="metric-value" id="availableTools">Multi-Modal Suite</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Memory Status:</span>
+                                <span class="metric-value" id="memoryStatus">Context Aware</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Fullscreen Modal -->
+    <div class="modal-overlay" id="imageModal" style="display: none;" onclick="hideImageFullscreen()">
+        <div class="image-modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="hideImageFullscreen()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="fullscreen-image-container">
+                <img id="fullscreenImage" src="" alt="Fullscreen Image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert System -->
+    <div class="alert-container" id="alertContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+    <script>
+        // Enhanced JavaScript for Agent Orchestrator Integration
+        
+        // Global variables for agent features
+        let agentMode = false;
+        let currentSession = null;
+        let agentExecutionPhase = null;
+        
+        // Check if agent is available on load
+        window.addEventListener('load', function() {
+            checkAgentStatus();
+        });
+        
+        async function checkAgentStatus() {
+            try {
+                const response = await fetch('/api/status/system');
+                if (response.ok) {
+                    const status = await response.json();
+                    updateAgentStatusDisplay(status);
+                }
+            } catch (error) {
+                console.log('Agent status check failed, using fallback mode');
+                updateAgentStatusDisplay({ agent_available: false });
+            }
+        }
+        
+        function updateAgentStatusDisplay(status) {
+            const agentStatus = document.getElementById('agentStatus');
+            const processingMode = document.getElementById('processingMode');
+            
+            if (status.agent_available !== false) {
+                agentMode = true;
+                if (agentStatus) {
+                    agentStatus.innerHTML = '<i class="fas fa-circle text-success"></i><span>Agent Active</span>';
+                }
+                if (processingMode) {
+                    processingMode.textContent = 'Intelligent Agent';
+                }
+            } else {
+                agentMode = false;
+                if (agentStatus) {
+                    agentStatus.innerHTML = '<i class="fas fa-circle text-warning"></i><span>Fallback Mode</span>';
+                }
+                if (processingMode) {
+                    processingMode.textContent = 'Standard Processing';
+                }
+            }
+        }
+        
+        // Enhanced message display for agent responses
+        function displayMessage(message, isUser = false) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = isUser ? 'user-message' : 'bot-message';
+            
+            if (!isUser && typeof message === 'object') {
+                // Agent response with metadata
+                if (message.agent_response && message.execution_time) {
+                    const agentInfo = document.createElement('div');
+                    agentInfo.className = 'agent-execution-info';
+                    agentInfo.innerHTML = `
+                        <div class="agent-badge">
+                            <i class="fas fa-brain"></i>
+                            <span>Intelligent Agent Response</span>
+                        </div>
+                        <div class="execution-metrics">
+                            <span class="metric">
+                                <i class="fas fa-clock"></i>
+                                ${message.execution_time.toFixed(2)}s
+                            </span>
+                            <span class="metric">
+                                <i class="fas fa-tasks"></i>
+                                ${message.tasks_executed || 1} tasks
+                            </span>
+                            <span class="metric">
+                                <i class="fas fa-chart-line"></i>
+                                ${((message.confidence_score || 0.8) * 100).toFixed(1)}% confidence
+                            </span>
+                        </div>
+                    `;
+                    messageDiv.appendChild(agentInfo);
+                }
+                
+                // Enhanced images from agent
+                if (message.enhanced_images && message.enhanced_images.length > 0) {
+                    message.enhanced_images.forEach(imageData => {
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'enhanced-image-container';
+                        imgContainer.innerHTML = `
+                            <div class="image-label">
+                                <i class="fas fa-magic"></i>
+                                <span>AI Enhanced Image</span>
+                            </div>
+                            <img src="${imageData}" class="enhanced-image" alt="AI Enhanced Image" onclick="showImageFullscreen('${imageData}')">
+                        `;
+                        messageDiv.appendChild(imgContainer);
+                    });
+                }
+                
+                // Main content
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.innerHTML = message.response || message.content || message;
+                messageDiv.appendChild(contentDiv);
+                
+            } else {
+                // Regular message
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.innerHTML = typeof message === 'object' ? (message.content || message.response || '') : message;
+                messageDiv.appendChild(contentDiv);
+            }
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // Trigger syntax highlighting
+            if (window.Prism) {
+                Prism.highlightAllUnder(messageDiv);
+            }
+        }
+        
+        // Enhanced form submission with agent execution phases
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+            
+            // Show user message
+            displayMessage(message, true);
+            messageInput.value = '';
+            
+            // Show agent execution status
+            if (agentMode) {
+                showAgentExecutionStatus();
+            }
+            
+            // Update button state
+            sendBtn.classList.add('loading');
+            sendBtn.disabled = true;
+            
+            try {
+                const formData = new FormData();
+                formData.append('message', message);
+                if (currentSession) {
+                    formData.append('session_id', currentSession);
+                }
+                
+                const response = await fetch('/api/process/text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        session_id: currentSession,
+                        stream: false
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayMessage(data);
+                } else {
+                    displayMessage({
+                        content: `Error: ${data.error}`,
+                        response: data.response || 'An error occurred'
+                    });
+                }
+                
+            } catch (error) {
+                displayMessage({
+                    content: `Network error: ${error.message}`,
+                    response: 'Failed to connect to the server'
+                });
+            } finally {
+                // Reset button state
+                sendBtn.classList.remove('loading');
+                sendBtn.disabled = false;
+                
+                // Hide agent execution status
+                hideAgentExecutionStatus();
+            }
+        }
+        
+        function showAgentExecutionStatus() {
+            const statusDiv = document.getElementById('agentExecutionStatus');
+            if (statusDiv) {
+                statusDiv.style.display = 'block';
+                
+                // Animate through phases
+                const phases = ['rag', 'planning', 'execution', 'synthesis'];
+                let currentPhase = 0;
+                
+                const phaseInterval = setInterval(() => {
+                    // Remove active class from all phases
+                    document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+                    
+                    // Add active class to current phase
+                    const currentPhaseElement = document.querySelector(`[data-phase="${phases[currentPhase]}"]`);
+                    if (currentPhaseElement) {
+                        currentPhaseElement.classList.add('active');
+                    }
+                    
+                    currentPhase++;
+                    if (currentPhase >= phases.length) {
+                        clearInterval(phaseInterval);
+                    }
+                }, 1000);
+                
+                // Store interval for cleanup
+                statusDiv.phaseInterval = phaseInterval;
+            }
+        }
+        
+        function hideAgentExecutionStatus() {
+            const statusDiv = document.getElementById('agentExecutionStatus');
+            if (statusDiv) {
+                statusDiv.style.display = 'none';
+                
+                // Clear phase animation
+                if (statusDiv.phaseInterval) {
+                    clearInterval(statusDiv.phaseInterval);
+                }
+                
+                // Reset phases
+                document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+            }
+        }
+        
+        // Enhanced image analysis with agent integration
+        async function analyzeImageWithText() {
+            const imageInput = document.getElementById('imageAnalysisInput');
+            const questionInput = document.getElementById('imageMessageInput');
+            
+            if (!imageInput.files[0]) {
+                showAlert('Please select an image first', 'warning');
+                return;
+            }
+            
+            const question = questionInput.value.trim();
+            if (!question) {
+                showAlert('Please enter a question about the image', 'warning');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+            formData.append('question', question);
+            if (currentSession) {
+                formData.append('session_id', currentSession);
+            }
+            
+            // Show processing status
+            showProcessingStatus('Analyzing image with intelligent processing...', 0);
+            
+            try {
+                const response = await fetch('/api/process/image-with-text', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.job_id) {
+                    pollJobStatus(data.job_id, 'image-text-analysis');
+                } else {
+                    throw new Error(data.error || 'Failed to start image analysis');
+                }
+                
+            } catch (error) {
+                hideProcessingStatus();
+                showAlert(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Enhanced job status polling with agent awareness
+        async function pollJobStatus(jobId, jobType) {
+            const maxPolls = 120; // 2 minutes max
+            let pollCount = 0;
+            
+            const poll = async () => {
+                try {
+                    const response = await fetch(`/api/status/${jobId}`);
+                    const data = await response.json();
+                    
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
+                    // Update progress
+                    updateProcessingStatus(data.progress || 0);
+                    
+                    if (data.status === 'completed') {
+                        hideProcessingStatus();
+                        handleJobCompletion(data, jobType);
+                        return;
+                    }
+                    
+                    if (data.status === 'error') {
+                        throw new Error(data.error || 'Processing failed');
+                    }
+                    
+                    // Continue polling
+                    pollCount++;
+                    if (pollCount < maxPolls) {
+                        setTimeout(poll, 1000);
+                    } else {
+                        throw new Error('Processing timeout');
+                    }
+                    
+                } catch (error) {
+                    hideProcessingStatus();
+                    showAlert(`Processing error: ${error.message}`, 'error');
+                }
+            };
+            
+            poll();
+        }
+        
+        function handleJobCompletion(data, jobType) {
+            if (!data.result) return;
+            
+            const result = data.result;
+            
+            // Create message based on job type
+            let messageContent = '';
+            
+            if (jobType === 'image-text-analysis' && result.formatted_html) {
+                messageContent = result.formatted_html;
+                
+                // Add agent execution info if available
+                if (result.agent_response) {
+                    const agentInfo = `
+                        <div class="agent-execution-info">
+                            <div class="agent-badge">
+                                <i class="fas fa-brain"></i>
+                                <span>Intelligent Agent Analysis</span>
+                            </div>
+                            <div class="execution-metrics">
+                                <span class="metric">
+                                    <i class="fas fa-clock"></i>
+                                    ${(result.execution_time || 0).toFixed(2)}s
+                                </span>
+                                <span class="metric">
+                                    <i class="fas fa-tasks"></i>
+                                    ${result.tasks_executed || 2} tasks
+                                </span>
+                                <span class="metric">
+                                    <i class="fas fa-chart-line"></i>
+                                    ${((result.confidence_score || 0.8) * 100).toFixed(1)}% confidence
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                    messageContent = agentInfo + messageContent;
+                }
+                
+            } else if (jobType === 'image-analysis' && result.formatted_html) {
+                messageContent = result.formatted_html;
+            }
+            
+            // Display the result
+            if (messageContent) {
+                displayMessage({ content: messageContent, enhanced_images: result.enhanced_image_base64 ? [result.enhanced_image_base64] : [] });
+            }
+        }
+        
+        // Utility functions
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            alertContainer.appendChild(alert);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alert.parentElement) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+        
+        function showProcessingStatus(message, progress) {
+            const statusDiv = document.getElementById('processingStatus');
+            const titleElement = document.getElementById('statusTitle');
+            const messageElement = document.getElementById('statusMessage');
+            const progressElement = document.getElementById('statusProgressBar');
+            
+            if (statusDiv) {
+                statusDiv.style.display = 'block';
+                if (titleElement) titleElement.textContent = agentMode ? 'Agent Processing...' : 'Processing...';
+                if (messageElement) messageElement.textContent = message;
+                if (progressElement) progressElement.style.width = `${progress}%`;
+            }
+        }
+        
+        function updateProcessingStatus(progress) {
+            const progressElement = document.getElementById('statusProgressBar');
+            if (progressElement) {
+                progressElement.style.width = `${progress}%`;
+            }
+        }
+        
+        function hideProcessingStatus() {
+            const statusDiv = document.getElementById('processingStatus');
+            if (statusDiv) {
+                statusDiv.style.display = 'none';
+            }
+        }
+        
+        // Enhanced keyboard handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                messageInput.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey) {
+                        event.preventDefault();
+                        sendMessage();
+                    }
+                });
+                
+                // Auto-resize textarea
+                messageInput.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
