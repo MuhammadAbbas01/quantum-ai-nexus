@@ -445,7 +445,7 @@ Comprehensive documentation available:
 
 ---
 
-## 🏆 **Why This Impresses Top Recruiters**
+## 🏆 **Why This Impresses FAANG Recruiters**
 
 ### ✅ **Demonstrates System Design Skills**
 - Scalable architecture with clear separation of concerns
@@ -490,7 +490,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for
 
 ```bash
 # Fork the repository
-git clone https://github.com/yourusername/quantum-ai-nexus.git
+git clone https://github.com/MuhammadAbbas01/quantum-ai-nexus.git
 
 # Create feature branch
 git checkout -b feature/amazing-feature
@@ -509,10 +509,10 @@ git push origin feature/amazing-feature
 ## 📞 **Contact & Support**
 
 - **Developer**: Muhammad Abbas
-- **Email**: your.email@example.com
-- **LinkedIn**: [Your LinkedIn Profile]
-- **Portfolio**: [Your Portfolio Website]
-- **Project Demo**: [Live Demo Link]
+- **Email**: abbaskhan0011ehe@gmail.com
+- **LinkedIn**: [linkedin.com/in/muhammadabbas-ai](https://www.linkedin.com/in/muhammadabbas-ai/)
+- **GitHub**: [@MuhammadAbbas01](https://github.com/MuhammadAbbas01)
+- **Project Repository**: [github.com/MuhammadAbbas01/quantum-ai-nexus](https://github.com/MuhammadAbbas01/quantum-ai-nexus)
 
 ---
 
@@ -534,7 +534,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ## ⭐ **Star History**
 
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/quantum-ai-nexus&type=Date)](https://star-history.com/https://github.com/MuhammadAbbas01/quantum-ai-nexus&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=MuhammadAbbas01/quantum-ai-nexus&type=Date)](https://star-history.com/#MuhammadAbbas01/quantum-ai-nexus&Date)
 
 ---
 
