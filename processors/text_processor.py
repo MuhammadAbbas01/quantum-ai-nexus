@@ -50,9 +50,9 @@ class EnhancedFreeChatBot:
         })
         
         # API Keys
-        self.openweathermap_api_key = "2225a6347e0fdaab50282aa6b109ae74"
-        self.google_generative_ai_api_key = "AIzaSyA7g2Rl7AGsTUP27X_1PWF3qF3TmRZpAHY"
-        self.newsapi_org_api_key = "806749c2517a4c548c635b1c2bf2a679"
+        self.openweathermap_api_key = "YOUR_WEATHER_API"
+        self.google_generative_ai_api_key = "YOUR_GEMINI_API"
+        self.newsapi_org_api_key = "YOUR_NEWS_API"
         
         # Financial APIs
         self.alpha_vantage_api_key = "YOUR_ALPHA_VANTAGE_KEY"
@@ -1594,4 +1594,5 @@ if __name__ == "__main__":
         print("\n\nSession ended. Goodbye!")
     except Exception as e:
         print(f"Fatal error: {e}")
+
         logging.error(f"Fatal error in main: {e}")
