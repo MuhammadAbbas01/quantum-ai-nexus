@@ -445,7 +445,7 @@ Comprehensive documentation available:
 
 ---
 
-## 🏆 **Why This Impresses FAANG Recruiters**
+## 🏆 **Why This Impresses Top Recruiters**
 
 ### ✅ **Demonstrates System Design Skills**
 - Scalable architecture with clear separation of concerns
@@ -534,7 +534,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ## ⭐ **Star History**
 
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/quantum-ai-nexus&type=Date)](https://star-history.com/#yourusername/quantum-ai-nexus&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/quantum-ai-nexus&type=Date)](https://star-history.com/https://github.com/MuhammadAbbas01/quantum-ai-nexus&Date)
 
 ---
 
