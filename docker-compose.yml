@@ -1,0 +1,72 @@
+# ===== docker-compose.yml =====
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: quantum-ai-nexus
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
+      - NEWSAPI_KEY=${NEWSAPI_KEY}
+      - DATABASE_URL=postgresql://postgres:password@db:5432/quantum_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+      - ./database:/app/database
+    depends_on:
+      - db
+      - redis
+    networks:
+      - quantum-network
+
+  db:
+    image: postgres:14-alpine
+    container_name: quantum-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=quantum_ai
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - quantum-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: quantum-redis
+    restart: always
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - quantum-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: quantum-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    networks:
+      - quantum-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  quantum-network:
+    driver: bridge
