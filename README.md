@@ -546,9 +546,6 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 **Made with ❤️ and 🧠 by Muhammad Abbas**
 
-**"This project represents 1000+ hours of engineering excellence"**
-
-[![FAANG Ready](https://img.shields.io/badge/FAANG-Ready-gold.svg?style=for-the-badge)]()
 [![Production Grade](https://img.shields.io/badge/Production-Grade-success.svg?style=for-the-badge)]()
 [![Enterprise Scale](https://img.shields.io/badge/Enterprise-Scale-blue.svg?style=for-the-badge)]()
 
